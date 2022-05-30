@@ -10,7 +10,7 @@ import BookOnline from './BookOnline';
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
   const { ticket, ticketLoading } = useContext(TicketContext);
-  console.log(ticket);
+
   if (enrollmentLoading || ticketLoading) {
     return (
       <CenterChildren>
