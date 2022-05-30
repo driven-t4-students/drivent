@@ -38,7 +38,8 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ],
     "rules": {
       "react-hooks/exhaustive-deps": "off",
@@ -99,7 +100,11 @@
       ],
       "space-before-function-paren": [
         "error",
-        "never"
+        {
+          "anonymous": "never",
+          "named": "never",
+          "asyncArrow": "always"
+        }
       ],
       "space-before-blocks": [
         "error",
@@ -132,6 +137,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-config-prettier": "^8.5.0",
     "git-commit-msg-linter": "^3.2.8",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2"
