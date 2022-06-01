@@ -6,6 +6,7 @@ import Loading from '../../../components/Loading';
 import { ToggleButtonGroup } from '@mui/material';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
+import PaymentDone from './PaymentDone';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
@@ -30,7 +31,8 @@ export default function Content() {
   return (
     <>
       <SelectTicketType />
-      {ticket?.type === 'online' ? <BookOnline /> : null}
+      {ticket?.type === 'online' && ticket?.payment === false ? <BookOnline /> : null}
+      {ticket?.payment === true && <PaymentDone />}
     </>
   );
 }
