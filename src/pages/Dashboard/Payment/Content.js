@@ -10,7 +10,7 @@ import PaymentDone from './PaymentDone';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
-  const { ticket, ticketLoading } = useContext(TicketContext);
+  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
 
   if (enrollmentLoading || ticketLoading) {
     return (
@@ -30,9 +30,19 @@ export default function Content() {
 
   return (
     <>
-      <SelectTicketType />
-      {ticket?.type === 'online' && ticket?.payment === false ? <BookOnline /> : null}
-      {ticket?.payment === true && <PaymentDone />}
+      {ticket?.booked === false ?
+        <>
+          <SelectTicketType />
+          {ticket?.type === 'online' ? <BookOnline /> : null}
+        </>
+        : ticket?.payment === true ?
+          <>
+            <h1>Resumo da compra</h1>
+            <PaymentDone />
+          </>
+          :
+          <button onClick={() => setTicket((ticket) => ({ ...ticket, payment: true }))}>Finalizar Pagamento</button>
+      }
     </>
   );
 }

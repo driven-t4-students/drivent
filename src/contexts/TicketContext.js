@@ -18,7 +18,7 @@ export default TicketContext;
 export function TicketProvider({ children }) {
   const { ticketData, ticketLoading } = useTicket();
 
-  const [ticket, setTicket] = useLocalStorage('ticket', null);
+  const [ticket, setTicket] = useLocalStorage('ticket', { booked: false });
 
   if (ticketData) setTicket({ ...ticketData, booked: true, payment: true });
 
