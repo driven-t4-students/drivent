@@ -37,7 +37,7 @@ export default function Content() {
         </>
         : ticket?.payment === true ?
           <>
-            <h1>Resumo da compra</h1>
+            <h1>Resumo da compra!</h1>
             <PaymentDone />
           </>
           :
