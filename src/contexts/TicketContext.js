@@ -20,7 +20,7 @@ export function TicketProvider({ children }) {
 
   const [ticket, setTicket] = useLocalStorage('ticket', null);
 
-  if (ticketData) setTicket({ ...ticketData, booked: true });
+  if (ticketData) setTicket({ ...ticketData, booked: true, payment: true });
 
   return <TicketContext.Provider value={{ ticket, setTicket, ticketLoading }}>{children}</TicketContext.Provider>;
 }
