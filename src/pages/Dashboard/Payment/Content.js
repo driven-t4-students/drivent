@@ -10,7 +10,7 @@ import PaymentDone from './PaymentDone';
 import BookPresential from './BookPresential';
 
 export default function Content() {
-  const { enrollment, enrollmentLoading } = useEnrollment('1');
+  const { enrollment, enrollmentLoading } = useEnrollment();
   const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
 
   if (enrollmentLoading || ticketLoading) {
