@@ -7,9 +7,10 @@ import { ToggleButtonGroup } from '@mui/material';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
 import PaymentDone from './PaymentDone';
+import BookPresential from './BookPresential';
 
 export default function Content() {
-  const { enrollment, enrollmentLoading } = useEnrollment();
+  const { enrollment, enrollmentLoading } = useEnrollment('1');
   const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
 
   if (enrollmentLoading || ticketLoading) {
@@ -20,29 +21,30 @@ export default function Content() {
     );
   }
 
-  if (!enrollment) {
-    return (
-      <CenterChildren>
-        <div>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</div>
-      </CenterChildren>
-    );
-  }
+  // if (!enrollment) {
+  //   return (
+  //     <CenterChildren>
+  //       <div>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</div>
+  //     </CenterChildren>
+  //   );
+  // }
 
   return (
     <>
-      {ticket?.booked === false ?
+      {ticket?.booked === false ? (
         <>
           <SelectTicketType />
           {ticket?.type === 'online' ? <BookOnline /> : null}
+          {ticket?.type === 'presential' ? <BookPresential /> : null}
         </>
-        : ticket?.payment === true ?
-          <>
-            <h1>Resumo da compra!</h1>
-            <PaymentDone />
-          </>
-          :
-          <button onClick={() => setTicket((ticket) => ({ ...ticket, payment: true }))}>Finalizar Pagamento</button>
-      }
+      ) : ticket?.payment === true ? (
+        <>
+          <h1>Resumo da compra!</h1>
+          <PaymentDone />
+        </>
+      ) : (
+        <button onClick={() => setTicket((ticket) => ({ ...ticket, payment: true }))}>Finalizar Pagamento</button>
+      )}
     </>
   );
 }
@@ -60,39 +62,3 @@ const CenterChildren = styled.div`
     color: #8e8e8e;
   }
 `;
-
-const ToggleType = styled(ToggleButtonGroup)(() => ({
-  gap: '24px',
-  marginTop: '17px',
-  margin: '17px 0 44px 0',
-  '& .MuiToggleButtonGroup-grouped': {
-    borderRadius: '20px !important',
-    border: '1px solid #CECECE !important',
-    width: '145px !important',
-    height: '145px !important',
-    backgroundColor: 'white !important',
-    textTransform: 'capitalize !important',
-    fontSize: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-
-    '& > span:first-of-type': {
-      color: '#454545 !important',
-    },
-    '& > span:last-of-type': {
-      color: '#898989 !important',
-    },
-
-    '&.Mui-selected': {
-      backgroundColor: '#FFEED2 !important',
-      color: '#898989 !important',
-    },
-  },
-}));
-
-const TicketTypeTitle = styled.span(() => ({
-  color: '#8E8E8E',
-  marginTop: '37px',
-  fontSize: '20px',
-  lineHeight: '23px',
-}));
