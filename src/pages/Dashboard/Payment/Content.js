@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
@@ -6,6 +6,7 @@ import Loading from '../../../components/Loading';
 import { ToggleButtonGroup } from '@mui/material';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
+import ResumeOrder from './ResumeOrder';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
@@ -29,8 +30,14 @@ export default function Content() {
 
   return (
     <>
-      <SelectTicketType />
-      {ticket?.type === 'online' ? <BookOnline /> : null}
+      {ticket?.checkPayment ?
+        <ResumeOrder /> :
+        <>
+          <SelectTicketType />
+          {ticket?.type === 'online' ? <BookOnline /> : null}
+        </>
+
+      }
     </>
   );
 }
