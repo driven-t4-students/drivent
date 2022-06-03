@@ -2,17 +2,33 @@ import { Stack } from '@mui/material';
 import { useContext } from 'react';
 import styled from 'styled-components';
 import ReactCreditCards from '../../../components/CreditCard/index';
-import Button from '../../../components/Form/Button';
 import SectionTitle from '../../../components/StyledSectionTitle';
 import TicketContext from '../../../contexts/TicketContext';
+import * as api from '../../../services/ticketApi';
+import MuiButton from '@material-ui/core/Button';
+import useToken from '../../../hooks/useToken';
+import UserContext from '../../../contexts/UserContext';
 
 export default function ResumeOrder() {
-  const { ticket } = useContext(TicketContext);
+  const { ticket, setTicket } = useContext(TicketContext);
+  const token = useToken();
+  const { userData } = useContext(UserContext); 
 
-  // const onClick = () => {
-  //   setTicket((ticket) => ({ ...ticket, booked: true }));
-  // };
-
+  function handleBookingTickets(e) {
+    e.preventDefault();
+    const formData = {
+      type: ticket.type,
+      hotel: ticket.hotel,
+      totalValue: ticket.value,
+      userId: userData.user.id
+    };
+    const promise = api.postBooking(token, formData);
+    promise.then((e) => {
+      setTicket((ticket) => ({ ...ticket, payment: true }));
+    }).catch((error) => {
+      alert(error.message);
+    });
+  }
   return (
     <Stack>
       <SectionTitle>Ingresso escolhido</SectionTitle>
@@ -23,7 +39,8 @@ export default function ResumeOrder() {
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>
-      <ReactCreditCards/>
+      <ReactCreditCards />
+      <StyledMuiButton className="btn btn-primary btn-block" onClick={handleBookingTickets}>FINALIZAR PAGAMENTO</StyledMuiButton>
     </Stack>
   );
 }
@@ -38,6 +55,11 @@ const ResumeTicket = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const StyledMuiButton = styled(MuiButton)`
+  margin-top: 18px !important;
+  width: 200px;
 `;
 
 const TicketDetails = styled.div`

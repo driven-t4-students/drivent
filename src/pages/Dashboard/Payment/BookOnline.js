@@ -9,7 +9,7 @@ export default function BookOnline(handlePayment) {
   const { setTicket } = useContext(TicketContext);
 
   const onClick = () => {
-    setTicket((ticket) => ({ ...ticket, booked: true, checkPayment: true, value: 100 }));
+    setTicket((ticket) => ({ ...ticket, booked: true, checkPayment: true, value: 100, hotel: false }));
   };
 
   return (

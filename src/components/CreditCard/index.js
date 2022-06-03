@@ -5,12 +5,10 @@ import {
   formatCreditCardNumber,
   formatCVC,
   formatExpirationDate,
-  formatFormData
 } from '../../utils/CreditCard.js';
 import 'react-credit-cards/es/styles-compiled.css';
 import './style.css';
 import styled from 'styled-components';
-import MuiButton from '@material-ui/core/Button';
 
 export default class App extends React.Component {
   state = {
@@ -22,7 +20,7 @@ export default class App extends React.Component {
     focused: '',
     formData: null
   };
-
+  
   handleCallback = ({ issuer }, isValid) => {
     if (isValid) {
       this.setState({ issuer });
@@ -49,7 +47,6 @@ export default class App extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { issuer } = this.state;
     const formData = [...e.target.elements]
       .filter(d => d.name)
       .reduce((acc, d) => {
@@ -133,7 +130,7 @@ export default class App extends React.Component {
             </ContainerFormData>
           </div>
         </ContainerForm>
-        <StyledMuiButton className="btn btn-primary btn-block">FINALIZAR PAGAMENTO</StyledMuiButton>
+        
       </>  
     );
   }
@@ -141,11 +138,6 @@ export default class App extends React.Component {
 
 const ContainerForm = styled.div`
     display: flex;
-`;
-
-const StyledMuiButton = styled(MuiButton)`
-  margin-top: 18px !important;
-  width: 200px;
 `;
 
 const FormNumber = styled.div`
