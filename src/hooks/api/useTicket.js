@@ -12,7 +12,7 @@ export default function useTicket() {
     try {
       await getTicket();
     } catch (error) {
-      if (error.response.status !== 404) toast('Não foi possível carregar seu ingresso');
+      if (error.response?.status !== 404) toast('Não foi possível carregar seu ingresso');
     }
   }, []);
 

@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Loading from '../../../components/Loading';
-import { ToggleButtonGroup } from '@mui/material';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
+import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
-  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+  const { ticket, ticketLoading } = useContext(TicketContext);
 
   if (enrollmentLoading || ticketLoading) {
     return (
@@ -41,7 +41,7 @@ export default function Content() {
             <PaymentDone />
           </>
           :
-          <button onClick={() => setTicket((ticket) => ({ ...ticket, payment: true }))}>Finalizar Pagamento</button>
+          <ResumeOrder/>
       }
     </>
   );
@@ -60,39 +60,3 @@ const CenterChildren = styled.div`
     color: #8e8e8e;
   }
 `;
-
-const ToggleType = styled(ToggleButtonGroup)(() => ({
-  gap: '24px',
-  marginTop: '17px',
-  margin: '17px 0 44px 0',
-  '& .MuiToggleButtonGroup-grouped': {
-    borderRadius: '20px !important',
-    border: '1px solid #CECECE !important',
-    width: '145px !important',
-    height: '145px !important',
-    backgroundColor: 'white !important',
-    textTransform: 'capitalize !important',
-    fontSize: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-
-    '& > span:first-of-type': {
-      color: '#454545 !important',
-    },
-    '& > span:last-of-type': {
-      color: '#898989 !important',
-    },
-
-    '&.Mui-selected': {
-      backgroundColor: '#FFEED2 !important',
-      color: '#898989 !important',
-    },
-  },
-}));
-
-const TicketTypeTitle = styled.span(() => ({
-  color: '#8E8E8E',
-  marginTop: '37px',
-  fontSize: '20px',
-  lineHeight: '23px',
-}));
