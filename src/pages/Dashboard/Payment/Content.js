@@ -21,13 +21,13 @@ export default function Content() {
     );
   }
 
-  // if (!enrollment) {
-  //   return (
-  //     <CenterChildren>
-  //       <div>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</div>
-  //     </CenterChildren>
-  //   );
-  // }
+  if (!enrollment) {
+    return (
+      <CenterChildren>
+        <div>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</div>
+      </CenterChildren>
+    );
+  }
 
   return (
     <>
