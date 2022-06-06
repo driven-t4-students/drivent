@@ -12,7 +12,8 @@ export default function useTicket() {
     try {
       await getTicket();
     } catch (error) {
-      if (error.response?.status !== 404) toast('Não foi possível carregar seu ingresso');
+      if (error.response?.status !== 404 && error.response?.status !== 401)
+        toast('Não foi possível carregar seu ingresso');
     }
   }, []);
 

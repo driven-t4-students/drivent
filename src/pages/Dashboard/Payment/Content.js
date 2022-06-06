@@ -18,11 +18,18 @@ export default function Content() {
 
   useEffect(() => {
     const promise = api.getTicket(userData.token);
-    promise.then((e) => {
-      setTicket(() => ({ type: e.type, booked: true, checkPayment: true, value: e.totalValue, hotel: e.hotel, payment: true }));
-    }).catch((error) => {
-      alert(error.message);
-    });
+    promise
+      .then((e) => {
+        setTicket(() => ({
+          type: e.type,
+          booked: true,
+          checkPayment: true,
+          value: e.totalValue,
+          hotel: e.hotel,
+          payment: true,
+        }));
+      })
+      .catch(() => {});
   }, []);
 
   if (enrollmentLoading || ticketLoading) {

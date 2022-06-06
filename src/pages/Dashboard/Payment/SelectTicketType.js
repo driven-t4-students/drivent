@@ -17,7 +17,6 @@ export default function SelectTicketType() {
     setTicket((ticket) => ({ ...ticket, type: newTicketType }));
   };
 
-  console.log(ticket);
   return (
     <Stack>
       <SectionTitle>Primeiro, escolha sua modalidade de ingresso</SectionTitle>
