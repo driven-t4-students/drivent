@@ -1,17 +1,29 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
+import UserContext from '../../../contexts/UserContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Loading from '../../../components/Loading';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
 import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
+import * as api from '../../../services/ticketApi';
 import BookPresential from './BookPresential';
 
 export default function Content() {
+  const { userData } = useContext(UserContext);
   const { enrollment, enrollmentLoading } = useEnrollment();
-  const { ticket, ticketLoading } = useContext(TicketContext);
+  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+
+  useEffect(() => {
+    const promise = api.getTicket(userData.token);
+    promise.then((e) => {
+      setTicket(() => ({ type: e.type, booked: true, checkPayment: true, value: e.totalValue, hotel: e.hotel, payment: true }));
+    }).catch((error) => {
+      alert(error.message);
+    });
+  }, []);
 
   if (enrollmentLoading || ticketLoading) {
     return (
@@ -39,7 +51,6 @@ export default function Content() {
         </>
       ) : ticket?.payment === true ? (
         <>
-          <h1>Resumo da compra!</h1>
           <PaymentDone />
         </>
       ) : (

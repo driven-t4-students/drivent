@@ -7,7 +7,6 @@ export default function PaymentDone() {
   const { ticket } = useContext(TicketContext);
   return (
     <>
-      <SectionTitle>Pagamento</SectionTitle>
       <SectionTitle>Ingresso escolhido</SectionTitle>
       <ResumeTicket>
         <TicketDetails>
@@ -15,6 +14,7 @@ export default function PaymentDone() {
           <TicketValue>R${ticket.value}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
+      <SectionTitle>Pagamento</SectionTitle>
       <Box>
         <div>
           <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,6 +38,9 @@ const Box = styled.div`
 
 const TextBox = styled.div`
   margin-left: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   h1{
     font-family: 'Roboto';
     font-style: normal;
@@ -52,6 +55,7 @@ const ResumeTicket = styled.div`
     height: 108px;
     border-radius: 20px;
     background-color: #FFEED2;
+    margin-bottom: 30px;
 
     display: flex;
     align-items: center;
