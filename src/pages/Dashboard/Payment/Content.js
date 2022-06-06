@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Loading from '../../../components/Loading';
-import { ToggleButtonGroup } from '@mui/material';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
+import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
 import BookPresential from './BookPresential';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
-  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+  const { ticket, ticketLoading } = useContext(TicketContext);
 
   if (enrollmentLoading || ticketLoading) {
     return (
@@ -43,7 +43,7 @@ export default function Content() {
           <PaymentDone />
         </>
       ) : (
-        <button onClick={() => setTicket((ticket) => ({ ...ticket, payment: true }))}>Finalizar Pagamento</button>
+        <ResumeOrder />
       )}
     </>
   );

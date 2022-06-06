@@ -1,10 +1,20 @@
 import SectionTitle from '../../../components/StyledSectionTitle';
 import styled from 'styled-components';
+import { useContext } from 'react';
+import TicketContext from '../../../contexts/TicketContext';
 
 export default function PaymentDone() {
+  const { ticket } = useContext(TicketContext);
   return (
     <>
       <SectionTitle>Pagamento</SectionTitle>
+      <SectionTitle>Ingresso escolhido</SectionTitle>
+      <ResumeTicket>
+        <TicketDetails>
+          <p>{ticket.type}</p>
+          <TicketValue>R${ticket.value}</TicketValue>
+        </TicketDetails>
+      </ResumeTicket>
       <Box>
         <div>
           <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,4 +45,34 @@ const TextBox = styled.div`
     font-size: 16px;
     line-height: 19px;
   }
+`;
+const ResumeTicket = styled.div`
+    margin-top: 17px;
+    width: 290px;
+    height: 108px;
+    border-radius: 20px;
+    background-color: #FFEED2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const TicketDetails = styled.div`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+    
+      color: #454545;
+      font-size: 16px;
+      font-weight: 400;
+`;
+
+const TicketValue = styled.p`
+    margin-top: 8px;
+    color: #898989;
+    font-size: 14px;
+    font-weight: 400;
 `;
