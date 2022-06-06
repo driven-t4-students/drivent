@@ -20,41 +20,45 @@ export default function ResumeOrder() {
       type: ticket.type,
       hotel: ticket.hotel,
       totalValue: ticket.value,
-      userId: userData.user.id
+      userId: userData.user.id,
     };
     const promise = api.postBooking(token, formData);
-    promise.then((e) => {
-      setTicket((ticket) => ({ ...ticket, payment: true }));
-    }).catch((error) => {
-      alert(error.message);
-    });
+    promise
+      .then((e) => {
+        setTicket((ticket) => ({ ...ticket, payment: true }));
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   }
   return (
     <Stack>
       <SectionTitle>Ingresso escolhido</SectionTitle>
       <ResumeTicket>
         <TicketDetails>
-          <p>{ticket.type}</p>
-          <TicketValue>R${ticket.value}</TicketValue>
+          <p>{ticket.type === 'online' ? 'Online' : 'Presencial'}</p>
+          <TicketValue>R$ {ticket.value}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>
       <ReactCreditCards />
-      <StyledMuiButton className="btn btn-primary btn-block" onClick={handleBookingTickets}>FINALIZAR PAGAMENTO</StyledMuiButton>
+      <StyledMuiButton className="btn btn-primary btn-block" onClick={handleBookingTickets}>
+        FINALIZAR PAGAMENTO
+      </StyledMuiButton>
     </Stack>
   );
 }
 
 const ResumeTicket = styled.div`
-    margin-top: 17px;
-    width: 290px;
-    height: 108px;
-    border-radius: 20px;
-    background-color: #FFEED2;
+  margin-top: 17px;
+  width: 290px;
+  height: 108px;
+  border-radius: 20px;
+  background-color: #ffeed2;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const StyledMuiButton = styled(MuiButton)`
@@ -63,21 +67,19 @@ const StyledMuiButton = styled(MuiButton)`
 `;
 
 const TicketDetails = styled.div`
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-    
-      color: #454545;
-      font-size: 16px;
-      font-weight: 400;
+  color: #454545;
+  font-size: 16px;
+  font-weight: 400;
 `;
 
 const TicketValue = styled.p`
-    margin-top: 8px;
-    color: #898989;
-    font-size: 14px;
-    font-weight: 400;
+  margin-top: 8px;
+  color: #898989;
+  font-size: 14px;
+  font-weight: 400;
 `;
-

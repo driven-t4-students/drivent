@@ -9,6 +9,7 @@ import BookOnline from './BookOnline';
 import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
 import * as api from '../../../services/ticketApi';
+import BookPresential from './BookPresential';
 
 export default function Content() {
   const { userData } = useContext(UserContext);
@@ -42,18 +43,19 @@ export default function Content() {
 
   return (
     <>
-      {ticket?.booked === false ?
+      {ticket?.booked === false ? (
         <>
           <SelectTicketType />
           {ticket?.type === 'online' ? <BookOnline /> : null}
+          {ticket?.type === 'presential' ? <BookPresential /> : null}
         </>
-        : ticket?.payment === true ?
-          <>
-            <PaymentDone />
-          </>
-          :
-          <ResumeOrder />
-      }
+      ) : ticket?.payment === true ? (
+        <>
+          <PaymentDone />
+        </>
+      ) : (
+        <ResumeOrder />
+      )}
     </>
   );
 }
