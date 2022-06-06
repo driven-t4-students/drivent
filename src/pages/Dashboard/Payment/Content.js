@@ -7,6 +7,7 @@ import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
 import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
+import BookPresential from './BookPresential';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
@@ -30,19 +31,20 @@ export default function Content() {
 
   return (
     <>
-      {ticket?.booked === false ?
+      {ticket?.booked === false ? (
         <>
           <SelectTicketType />
           {ticket?.type === 'online' ? <BookOnline /> : null}
+          {ticket?.type === 'presential' ? <BookPresential /> : null}
         </>
-        : ticket?.payment === true ?
-          <>
-            <h1>Resumo da compra!</h1>
-            <PaymentDone />
-          </>
-          :
-          <ResumeOrder/>
-      }
+      ) : ticket?.payment === true ? (
+        <>
+          <h1>Resumo da compra!</h1>
+          <PaymentDone />
+        </>
+      ) : (
+        <ResumeOrder />
+      )}
     </>
   );
 }
