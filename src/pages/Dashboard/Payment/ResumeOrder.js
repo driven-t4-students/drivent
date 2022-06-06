@@ -46,12 +46,6 @@ export default function ResumeOrder() {
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>
       <ReactCreditCards />
-
-      <SubmitContainer>
-        <Button type="submit" onClick={handleBookingTickets}>
-          FINALIZAR PAGAMENTO
-        </Button>
-      </SubmitContainer>
     </Stack>
   );
 }
@@ -91,11 +85,3 @@ const TicketValue = styled.p`
   font-weight: 400;
 `;
 
-const SubmitContainer = styled.div`
-  margin-top: 40px !important;
-  width: 100% !important;
-
-  > button {
-    margin-top: 0 !important;
-  }
-`;

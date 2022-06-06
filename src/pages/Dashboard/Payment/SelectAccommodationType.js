@@ -16,6 +16,7 @@ export default function SelectAcomodationType() {
     setTicket((ticket) => ({
       ...ticket,
       hotel: newAcomodationType === 'hotel-on' ? true : newAcomodationType === null ? null : false,
+      value: newAcomodationType === 'hotel-on' ? 600 : newAcomodationType === null ? null : 200
     }));
   };
 
