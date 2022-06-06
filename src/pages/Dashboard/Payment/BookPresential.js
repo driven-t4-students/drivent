@@ -20,19 +20,20 @@ export default function BookPresential() {
     <Stack>
       <SectionTitle>Ótimo! Agora escolha sua modalidade de hospedagem</SectionTitle>
       <SelectAcomodationType />
-      {ticket?.acomodationType === null ? (
+      {ticket?.hotel === null ? (
         ''
       ) : (
-        <SectionTitle>
-          Fechado! O total ficou em <strong>{ticket?.acomodationType === 'hotel-on' ? 'R$ 600' : 'RS 250'}</strong>.
-          Agora é só confirmar:
-        </SectionTitle>
+        <>
+          <SectionTitle>
+            Fechado! O total ficou em <strong>{ticket?.hotel ? 'R$ 600' : 'RS 250'}</strong>. Agora é só confirmar:
+          </SectionTitle>
+          <SubmitContainer>
+            <Button type="submit" onClick={onClick}>
+              Reservar ingresso
+            </Button>
+          </SubmitContainer>
+        </>
       )}
-      <SubmitContainer>
-        <Button type="submit" onClick={onClick}>
-          Reservar ingresso
-        </Button>
-      </SubmitContainer>
     </Stack>
   );
 }
