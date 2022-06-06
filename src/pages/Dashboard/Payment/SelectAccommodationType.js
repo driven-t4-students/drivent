@@ -13,7 +13,10 @@ export default function SelectAcomodationType() {
 
   const handleOnChange = (_event, newAcomodationType) => {
     setAcomodationType(newAcomodationType);
-    setTicket((ticket) => ({ ...ticket, acomodationType: newAcomodationType }));
+    setTicket((ticket) => ({
+      ...ticket,
+      hotel: newAcomodationType === 'hotel-on' ? true : newAcomodationType === null ? null : false,
+    }));
   };
 
   return (
