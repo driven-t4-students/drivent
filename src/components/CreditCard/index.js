@@ -1,11 +1,7 @@
 import React from 'react';
 import Card from 'react-credit-cards';
 
-import {
-  formatCreditCardNumber,
-  formatCVC,
-  formatExpirationDate,
-} from '../../utils/CreditCard.js';
+import { formatCreditCardNumber, formatCVC, formatExpirationDate } from '../../utils/CreditCard.js';
 import 'react-credit-cards/es/styles-compiled.css';
 import './style.css';
 import styled from 'styled-components';
@@ -18,9 +14,9 @@ export default class App extends React.Component {
     cvc: '',
     issuer: '',
     focused: '',
-    formData: null
+    formData: null,
   };
-  
+
   handleCallback = ({ issuer }, isValid) => {
     if (isValid) {
       this.setState({ issuer });
@@ -29,7 +25,7 @@ export default class App extends React.Component {
 
   handleInputFocus = ({ target }) => {
     this.setState({
-      focused: target.name
+      focused: target.name,
     });
   };
 
@@ -45,10 +41,10 @@ export default class App extends React.Component {
     this.setState({ [target.name]: target.value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const formData = [...e.target.elements]
-      .filter(d => d.name)
+      .filter((d) => d.name)
       .reduce((acc, d) => {
         acc[d.name] = d.value;
         return acc;
@@ -73,8 +69,8 @@ export default class App extends React.Component {
               focused={focused}
               callback={this.handleCallback}
             />
-            <ContainerFormData ref={c => (this.form = c)} onSubmit={this.handleSubmit}>
-              <FormNumber >
+            <ContainerFormData ref={(c) => (this.form = c)} onSubmit={this.handleSubmit}>
+              <FormNumber>
                 <input
                   type="tel"
                   name="number"
@@ -125,42 +121,46 @@ export default class App extends React.Component {
                 </div>
               </ContainerFormBottom>
               <input type="hidden" name="issuer" value={issuer} />
-              <div className="form-actions">
-              </div>
+              <div className="form-actions"></div>
             </ContainerFormData>
           </div>
         </ContainerForm>
-        
-      </>  
+      </>
     );
   }
 }
 
 const ContainerForm = styled.div`
-    display: flex;
+  display: flex;
 `;
 
 const FormNumber = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & small {
+    margin-left: 5px;
+  }
 `;
 
 const ContainerFormBottom = styled.div`
   display: flex;
 
   gap: 10px;
-   
-  input{
+
+  input {
     width: 195px;
   }
 `;
 
 const ContainerFormData = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-    height: 200px;
-    input{
-      height: 45px;
-    }
+  height: 200px;
+  input {
+    height: 45px;
+  }
 `;
-
