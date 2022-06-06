@@ -10,6 +10,9 @@ export default function BookPresential() {
   const { ticket, setTicket } = useContext(TicketContext);
 
   const onClick = () => {
+    if (ticket.acomodationType === 'hotel-on') ticket.value = 600;
+    else ticket.value = 250;
+
     setTicket((ticket) => ({ ...ticket, booked: true }));
   };
 
