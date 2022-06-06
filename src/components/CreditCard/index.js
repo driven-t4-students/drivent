@@ -9,6 +9,7 @@ import Button from '../../components/Form/Button';
 import TicketContext from '../../contexts/TicketContext.js';
 import useToken from '../../hooks/useToken.js';
 import UserContext from '../../contexts/UserContext.js';
+import { toast } from 'react-toastify';
 
 export default function ReactCreditCards() {
   const { ticket, setTicket } = useContext(TicketContext);
@@ -39,7 +40,7 @@ export default function ReactCreditCards() {
         })
         .catch((error) => { });
     } else {
-      alert('Favor preencher os dados do cartão!');
+      toast('Favor preencher os dados do cartão!');
     }
   }
     
