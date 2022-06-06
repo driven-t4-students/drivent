@@ -8,6 +8,7 @@ import * as api from '../../../services/ticketApi';
 import MuiButton from '@material-ui/core/Button';
 import useToken from '../../../hooks/useToken';
 import UserContext from '../../../contexts/UserContext';
+import Button from '../../../components/Form/Button';
 
 export default function ResumeOrder() {
   const { ticket, setTicket } = useContext(TicketContext);
@@ -27,24 +28,30 @@ export default function ResumeOrder() {
       .then((e) => {
         setTicket((ticket) => ({ ...ticket, payment: true }));
       })
-      .catch((error) => {
-        alert(error.message);
-      });
+      .catch((error) => {});
   }
+
   return (
     <Stack>
       <SectionTitle>Ingresso escolhido</SectionTitle>
       <ResumeTicket>
         <TicketDetails>
-          <p>{ticket.type === 'online' ? 'Online' : 'Presencial'}</p>
+          <p>
+            {ticket.type === 'online'
+              ? 'Online'
+              : `Presencial ${ticket.acomodationType === 'hotel-on' ? ' + Com Hotel' : ' + Sem Hotel'}`}
+          </p>
           <TicketValue>R$ {ticket.value}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>
       <ReactCreditCards />
-      <StyledMuiButton className="btn btn-primary btn-block" onClick={handleBookingTickets}>
-        FINALIZAR PAGAMENTO
-      </StyledMuiButton>
+
+      <SubmitContainer>
+        <Button type="submit" onClick={handleBookingTickets}>
+          FINALIZAR PAGAMENTO
+        </Button>
+      </SubmitContainer>
     </Stack>
   );
 }
@@ -82,4 +89,13 @@ const TicketValue = styled.p`
   color: #898989;
   font-size: 14px;
   font-weight: 400;
+`;
+
+const SubmitContainer = styled.div`
+  margin-top: 40px !important;
+  width: 100% !important;
+
+  > button {
+    margin-top: 0 !important;
+  }
 `;
