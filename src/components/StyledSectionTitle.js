@@ -6,7 +6,7 @@ export default function SectionTitle({ children }) {
 
 const Style = styled.span(() => ({
   color: '#8E8E8E',
-  marginTop: '37px',
+  marginTop: '20px',
   fontSize: '20px',
   lineHeight: '23px',
 }));

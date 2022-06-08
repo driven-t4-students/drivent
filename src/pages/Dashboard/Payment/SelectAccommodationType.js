@@ -2,33 +2,35 @@ import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import TicketContext from '../../../contexts/TicketContext';
-import SectionTitle from '../../../components/StyledSectionTitle';
 
-export default function SelectTicketType() {
-  const [ticketType, setTicketType] = useState(null);
+export default function SelectAcomodationType() {
+  const [acomodationType, setAcomodationType] = useState(null);
   const { ticket, setTicket } = useContext(TicketContext);
 
   useEffect(() => {
-    if (ticket) setTicketType(ticket.type);
+    if (ticket) setAcomodationType(ticket.acomodationType);
   }, []);
 
-  const handleOnChange = (_event, newTicketType) => {
-    setTicketType(newTicketType);
-    setTicket((ticket) => ({ ...ticket, type: newTicketType }));
+  const handleOnChange = (_event, newAcomodationType) => {
+    setAcomodationType(newAcomodationType);
+    setTicket((ticket) => ({
+      ...ticket,
+      hotel: newAcomodationType === 'hotel-on' ? true : newAcomodationType === null ? null : false,
+      value: newAcomodationType === 'hotel-on' ? 600 : newAcomodationType === null ? null : 200
+    }));
   };
 
   return (
     <Stack>
-      <SectionTitle>Primeiro, escolha sua modalidade de ingresso</SectionTitle>
-      <ToggleType value={ticketType} exclusive onChange={handleOnChange} aria-label="text alignment">
-        <ToggleButton value="presential" aria-label="presential">
-          <span>Presencial</span>
-          <span>R$ 250</span>
+      <ToggleType value={acomodationType} exclusive onChange={handleOnChange} aria-label="text alignment">
+        <ToggleButton value="hotel-off" aria-label="hotel-off">
+          <span>Sem Hotel</span>
+          <span>+R$ 0</span>
         </ToggleButton>
 
-        <ToggleButton value="online" aria-label="online">
-          <span>Online</span>
-          <span>R$ 100</span>
+        <ToggleButton value="hotel-on" aria-label="hotel-on">
+          <span>Com Hotel</span>
+          <span>+R$ 350</span>
         </ToggleButton>
       </ToggleType>
     </Stack>

@@ -5,11 +5,11 @@ import Button from '../../../components/Form/Button';
 import SectionTitle from '../../../components/StyledSectionTitle';
 import TicketContext from '../../../contexts/TicketContext';
 
-export default function BookOnline() {
+export default function BookOnline(handlePayment) {
   const { setTicket } = useContext(TicketContext);
 
   const onClick = () => {
-    setTicket((ticket) => ({ ...ticket, booked: true }));
+    setTicket((ticket) => ({ ...ticket, booked: true, checkPayment: true, value: 100, hotel: false }));
   };
 
   return (
