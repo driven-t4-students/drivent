@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
+import { Typography } from '@material-ui/core';
+import Content from './Content';
 
 export default function Hotel() {
   const { ticket } = useContext(TicketContext);
@@ -20,7 +22,12 @@ export default function Hotel() {
       </CenterChildren>
     );
   }
-  return 'Hotel: Em breve!';
+  return (
+    <>
+      <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
+      <Content/>
+    </>
+  );
 }
 
 const CenterChildren = styled.div`
@@ -35,4 +42,7 @@ const CenterChildren = styled.div`
     text-align: center;
     color: #8e8e8e;
   }
+`;
+const StyledTypography = styled(Typography)`
+  margin-bottom: 20px !important;
 `;
