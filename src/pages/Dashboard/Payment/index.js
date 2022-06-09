@@ -13,4 +13,5 @@ export default function Payment() {
 
 const StyledTypography = styled(Typography)`
   margin-bottom: 20px !important;
+  text-align: left;
 `;

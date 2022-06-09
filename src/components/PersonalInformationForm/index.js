@@ -258,6 +258,7 @@ export default function PersonalInformationForm() {
 
 const StyledTypography = styled(Typography)`
   margin-bottom: 20px !important;
+  text-align: left;
 `;
 
 const SubmitContainer = styled.div`
