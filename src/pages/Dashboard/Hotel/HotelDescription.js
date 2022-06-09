@@ -1,19 +1,66 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 
 export default function HotelDescription({ hotel, handleChange }) {
-  const { id, imageUrl, name } = hotel;
+  const { id, imageUrl, name, Room } = hotel;
   const { ticket } = useContext(TicketContext);
-  
+  const [numberBeds, setNumberBeds] = useState(0);
+  const [acommodation, setAcommodation] = useState('');
+  const [bedsOccuped, setBedsOccuped] = useState(0);
+
+  function SumNumberBeds(Room) {
+    const number = Room.reduce((total, item) => item.type + total, 0);
+    setNumberBeds(number);
+  }
+
+  function verifyAcommodation(Room) {
+    const typeAcommodation = [];
+    const room = Room.map((el) => {
+      if (el.type === 1) {
+        if (!typeAcommodation.find((el) => el === 'Single')) {
+          return typeAcommodation.push('Single');
+        }
+      } ;
+      if (el.type === 2) {
+        if (!typeAcommodation.find((el) => el === 'Double')) {
+          return typeAcommodation.push('Double');
+        }
+      }; if (el.type === 3) {
+        if (!typeAcommodation.find((el) => el === 'Triple')) {
+          return typeAcommodation.push('Triple');
+        }
+      };
+    });
+    setAcommodation(typeAcommodation);
+  }
+
+  function verifyBedsOccuped(Room) {
+    let counter = 0;
+    const beds = Room.map((room) => {
+      room.Bed.map((el) => {
+        if (el.Ticket) {
+          counter += 1;
+        }
+      });
+    });
+    setBedsOccuped(counter); 
+  }
+
+  useEffect(() => {
+    verifyAcommodation(Room);
+    SumNumberBeds(Room);
+    verifyBedsOccuped(Room);
+  }, []);
+
   return (
     <Hotel onClick={() => handleChange(id)} active={ ticket.hotelId === id ? true : false }>
       <img src={imageUrl} />
       <HotelName>{name}</HotelName>
       <Description>Tipos de acomodação:</Description>
-      <SubDescription></SubDescription>
+      <SubDescription>{acommodation[0]+', '+ acommodation[1] + ' e ' + acommodation[2] }</SubDescription>
       <Description>Vagas Disponíveis:</Description>
-      <SubDescription></SubDescription>
+      <SubDescription>{numberBeds - bedsOccuped }</SubDescription>
     </Hotel>
   );
 }
