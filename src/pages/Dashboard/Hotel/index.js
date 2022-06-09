@@ -1,7 +1,7 @@
+import { Typography } from '@material-ui/core';
 import { useContext } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
-import { Typography } from '@material-ui/core';
 import Content from './Content';
 
 export default function Hotel() {
@@ -30,6 +30,11 @@ export default function Hotel() {
   );
 }
 
+const StyledTypography = styled(Typography)`
+  margin-bottom: 20px !important;
+  text-align: left;
+`;
+
 const CenterChildren = styled.div`
   width: 100%;
   height: calc(100% - 65px);
@@ -42,7 +47,4 @@ const CenterChildren = styled.div`
     text-align: center;
     color: #8e8e8e;
   }
-`;
-const StyledTypography = styled(Typography)`
-  margin-bottom: 20px !important;
 `;
