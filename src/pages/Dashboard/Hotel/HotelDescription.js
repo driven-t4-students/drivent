@@ -9,58 +9,59 @@ export default function HotelDescription({ hotel, handleChange }) {
   const [acommodation, setAcommodation] = useState('');
   const [bedsOccuped, setBedsOccuped] = useState(0);
 
-  function SumNumberBeds(Room) {
-    const number = Room.reduce((total, item) => item.type + total, 0);
+  async function SumNumberBeds(Room) {
+    const number = await Room.reduce((total, item) => item.type + total, 0);
     setNumberBeds(number);
   }
 
-  function verifyAcommodation(Room) {
+  async function verifyAcommodation(Room) {
     const typeAcommodation = [];
-    const room = Room.map((el) => {
+    await Room.map((el) => {
       if (el.type === 1) {
         if (!typeAcommodation.find((el) => el === 'Single')) {
           return typeAcommodation.push('Single');
         }
-      } ;
+      }
       if (el.type === 2) {
         if (!typeAcommodation.find((el) => el === 'Double')) {
           return typeAcommodation.push('Double');
         }
-      }; if (el.type === 3) {
+      }
+      if (el.type === 3) {
         if (!typeAcommodation.find((el) => el === 'Triple')) {
           return typeAcommodation.push('Triple');
         }
-      };
+      }
     });
     setAcommodation(typeAcommodation);
   }
 
-  function verifyBedsOccuped(Room) {
+  async function verifyBedsOccuped(Room) {
     let counter = 0;
-    const beds = Room.map((room) => {
-      room.Bed.map((el) => {
+    await Room.map(async (room) => {
+      await room.Bed.map((el) => {
         if (el.Ticket) {
           counter += 1;
         }
       });
     });
-    setBedsOccuped(counter); 
+    setBedsOccuped(counter);
   }
 
-  useEffect(() => {
-    verifyAcommodation(Room);
-    SumNumberBeds(Room);
-    verifyBedsOccuped(Room);
+  useEffect(async () => {
+    await verifyAcommodation(Room);
+    await SumNumberBeds(Room);
+    await verifyBedsOccuped(Room);
   }, []);
 
   return (
-    <Hotel onClick={() => handleChange(id)} active={ ticket.hotelId === id ? true : false }>
-      <img src={imageUrl} />
+    <Hotel onClick={() => handleChange(id)} active={ticket.hotelId === id ? true : false}>
+      <img src={imageUrl} alt={name} />
       <HotelName>{name}</HotelName>
       <Description>Tipos de acomodação:</Description>
-      <SubDescription>{acommodation[0]+', '+ acommodation[1] + ' e ' + acommodation[2] }</SubDescription>
+      <SubDescription>{acommodation[0] + ', ' + acommodation[1] + ' e ' + acommodation[2]}</SubDescription>
       <Description>Vagas Disponíveis:</Description>
-      <SubDescription>{numberBeds - bedsOccuped }</SubDescription>
+      <SubDescription>{numberBeds - bedsOccuped}</SubDescription>
     </Hotel>
   );
 }
@@ -68,24 +69,23 @@ export default function HotelDescription({ hotel, handleChange }) {
 const Hotel = styled.div`
   width: 196px;
   height: 264px;
-  
-  background: #F1F1F1;
+
+  background: #f1f1f1;
   border-radius: 10px;
-  
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   padding: 16px;
-  
+
   ${(props) => (props.active ? 'background-color:#FFEED2;' : '')};
 
-  img{
+  img {
     width: 168px;
     height: 109px;
-    border-radius:5px ;
+    border-radius: 5px;
   }
-
 `;
 const HotelName = styled.div`
   width: 100%;
@@ -98,7 +98,6 @@ const HotelName = styled.div`
 
   margin-top: 10px;
   margin-bottom: 10px;
-
 `;
 
 const Description = styled.div`
@@ -110,9 +109,7 @@ const Description = styled.div`
   font-size: 12px;
   line-height: 14px;
 
-  color: #3C3C3C;
-
-
+  color: #3c3c3c;
 `;
 
 const SubDescription = styled.div`
@@ -124,8 +121,6 @@ const SubDescription = styled.div`
   font-size: 12px;
   line-height: 14px;
 
-  color: #3C3C3C;
+  color: #3c3c3c;
   margin-bottom: 15px;
-
 `;
-
