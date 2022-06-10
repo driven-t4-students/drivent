@@ -39,7 +39,7 @@ export default function ResumeOrder() {
           <p>
             {ticket.type === 'online'
               ? 'Online'
-              : `Presencial ${ticket.acomodationType === 'hotel-on' ? ' + Com Hotel' : ' + Sem Hotel'}`}
+              : `Presencial ${ticket.hotel === true ? ' + Com Hotel' : ' + Sem Hotel'}`}
           </p>
           <TicketValue>R$ {ticket.value}</TicketValue>
         </TicketDetails>
@@ -84,4 +84,3 @@ const TicketValue = styled.p`
   font-size: 14px;
   font-weight: 400;
 `;
-
