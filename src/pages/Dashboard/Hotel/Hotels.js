@@ -16,7 +16,7 @@ export default function Hotels() {
   const [hasBed, handleBed] = useState();
 
   useEffect(() => {
-    ticketApi.getTicket(userData.token).then(async (e) => handleBed(1));
+    ticketApi.getTicket(userData.token).then(async (e) => handleBed(e.bedId));
 
     const promise = api.getHotels(userData.token);
     promise
