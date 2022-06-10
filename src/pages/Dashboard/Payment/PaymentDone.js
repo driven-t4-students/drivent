@@ -10,11 +10,7 @@ export default function PaymentDone() {
       <SectionTitle>Ingresso escolhido</SectionTitle>
       <ResumeTicket>
         <TicketDetails>
-          <p>
-            {ticket.type === 'online'
-              ? 'Online'
-              : `Presencial ${ticket.acomodationType === 'hotel-on' ? ' + Com Hotel' : ' + Sem Hotel'}`}
-          </p>
+          <p>{ticket.type === 'online' ? 'Online' : `Presencial ${ticket.hotel ? ' + Com Hotel' : ' + Sem Hotel'}`}</p>
           <TicketValue>R${ticket.value}</TicketValue>
         </TicketDetails>
       </ResumeTicket>

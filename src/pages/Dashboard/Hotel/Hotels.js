@@ -2,46 +2,54 @@ import { Stack } from '@mui/material';
 import styled from 'styled-components';
 import SectionTitle from '../../../components/StyledSectionTitle';
 import * as api from '../../../services/hotelsApi';
+import * as ticketApi from '../../../services/ticketApi';
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '../../../contexts/UserContext';
 import HotelDescription from './HotelDescription';
 import TicketContext from '../../../contexts/TicketContext';
+import SelectedRoom from './selectedRoom';
 
 export default function Hotels() {
   const { userData } = useContext(UserContext);
   const [hotels, setHotels] = useState([]);
   const { setTicket } = useContext(TicketContext);
+  const [hasBed, handleBed] = useState();
 
   useEffect(() => {
+    ticketApi.getTicket(userData.token).then(async (e) => handleBed(1));
+
     const promise = api.getHotels(userData.token);
     promise
       .then(async (e) => {
         setHotels(e.hotels);
       })
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   function handleChange(id) {
     setTicket((ticket) => ({
-      ...ticket, hotelId: id
+      ...ticket,
+      hotelId: id,
     }));
   }
 
   return (
     <Stack>
-      <SectionTitle>Primeiro, escolha sua modalidade de ingresso</SectionTitle>
-      <ContainerHotels>
-        {hotels.map((hotel) => (
-          <HotelDescription
-            hotel={hotel}
-            handleChange={handleChange}
-          />
-        )
-        )}
-      </ContainerHotels>
+      {!hasBed ? (
+        <>
+          <SectionTitle>Primeiro, escolha sua modalidade de ingresso</SectionTitle>
+          <ContainerHotels>
+            {hotels.map((hotel, i) => (
+              <HotelDescription hotel={hotel} handleChange={handleChange} key={i} />
+            ))}
+          </ContainerHotels>
+        </>
+      ) : (
+        <SelectedRoom hasBed={hasBed} />
+      )}
     </Stack>
   );
-};
+}
 
 const ContainerHotels = styled.div`
   margin-top: 18px;
@@ -49,4 +57,3 @@ const ContainerHotels = styled.div`
 
   gap: 20px;
 `;
-
