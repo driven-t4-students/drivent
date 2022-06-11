@@ -22,13 +22,7 @@ export default function Content() {
     );
   }
 
-  if (ticket.hotel)
-    return (
-      <>
-        <StyledSectionTitle>Ótima pedida! Agora escolha seu quarto:</StyledSectionTitle>
-        <Hotels />
-      </>
-    );
+  if (ticket.hotel) return <Hotels />;
 
   if (ticket.hotelId) {
     return (
