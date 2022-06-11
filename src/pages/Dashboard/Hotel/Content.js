@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import ChooseBed from './ChooseBed';
+import Hotels from './Hotels';
 
 export default function Content() {
   const { ticket } = useContext(TicketContext);
@@ -20,6 +21,14 @@ export default function Content() {
       </CenterChildren>
     );
   }
+
+  if (ticket.hotel)
+    return (
+      <>
+        <StyledSectionTitle>Ótima pedida! Agora escolha seu quarto:</StyledSectionTitle>
+        <Hotels />
+      </>
+    );
 
   if (ticket.hotelId) {
     return (

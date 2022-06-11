@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import ReactCreditCards from '../../../components/CreditCard/index';
 import SectionTitle from '../../../components/StyledSectionTitle';
 import TicketContext from '../../../contexts/TicketContext';
-import MuiButton from '@material-ui/core/Button';
 
 export default function ResumeOrder() {
   const { ticket } = useContext(TicketContext);
@@ -17,7 +16,7 @@ export default function ResumeOrder() {
           <p>
             {ticket.type === 'online'
               ? 'Online'
-              : `Presencial ${ticket.acomodationType === 'hotel-on' ? ' + Com Hotel' : ' + Sem Hotel'}`}
+              : `Presencial ${ticket.hotel === true ? ' + Com Hotel' : ' + Sem Hotel'}`}
           </p>
           <TicketValue>R$ {ticket.totalValue}</TicketValue>
         </TicketDetails>
@@ -38,11 +37,6 @@ const ResumeTicket = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const StyledMuiButton = styled(MuiButton)`
-  margin-top: 18px !important;
-  width: 200px;
 `;
 
 const TicketDetails = styled.div`
