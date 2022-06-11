@@ -16,6 +16,7 @@ import { UserProvider } from './contexts/UserContext';
 
 import useToken from './hooks/useToken';
 import { TicketProvider } from './contexts/TicketContext';
+import { Oauth } from './pages/Oauth/oauth';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
                 <Route path="/" element={<Countdown />} />
                 <Route path="/enroll" element={<Enroll />} />
                 <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/oauth/login" element={<Oauth />} />
 
                 <Route
                   path="/dashboard"
