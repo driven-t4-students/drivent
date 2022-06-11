@@ -6,7 +6,11 @@ import * as ticketApi from '../../services/ticketApi';
 
 export default function useTicket() {
   const token = useToken();
-  const { data: ticket, loading: ticketLoading, act: getTicket } = useAsync(() => ticketApi.getTicket(token), false);
+  const {
+    data: ticketData,
+    loading: ticketLoading,
+    act: getTicket,
+  } = useAsync(() => ticketApi.getTicket(token), false);
 
   useEffect(async () => {
     try {
@@ -18,7 +22,7 @@ export default function useTicket() {
   }, []);
 
   return {
-    ticket,
+    ticketData,
     ticketLoading,
   };
 }

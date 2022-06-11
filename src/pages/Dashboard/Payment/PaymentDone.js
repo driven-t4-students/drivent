@@ -5,6 +5,7 @@ import TicketContext from '../../../contexts/TicketContext';
 
 export default function PaymentDone() {
   const { ticket } = useContext(TicketContext);
+
   return (
     <>
       <SectionTitle>Ingresso escolhido</SectionTitle>
@@ -15,7 +16,7 @@ export default function PaymentDone() {
               ? 'Online'
               : `Presencial ${ticket.acomodationType === 'hotel-on' ? ' + Com Hotel' : ' + Sem Hotel'}`}
           </p>
-          <TicketValue>R${ticket.value}</TicketValue>
+          <TicketValue>R$ {ticket.totalValue}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>

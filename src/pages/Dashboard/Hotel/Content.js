@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
+import ChooseBed from './ChooseBed';
 
 export default function Content() {
   const { ticket } = useContext(TicketContext);
@@ -19,6 +20,16 @@ export default function Content() {
       </CenterChildren>
     );
   }
+
+  if (ticket.hotelId) {
+    return (
+      <>
+        <StyledSectionTitle>Ótima pedida! Agora escolha seu quarto:</StyledSectionTitle>
+        <ChooseBed />
+      </>
+    );
+  }
+
   return 'Hotel: Em breve!';
 }
 
@@ -35,3 +46,10 @@ const CenterChildren = styled.div`
     color: #8e8e8e;
   }
 `;
+
+const StyledSectionTitle = styled.span(() => ({
+  color: '#8E8E8E',
+  marginTop: '52px',
+  fontSize: '20px',
+  lineHeight: '23px',
+}));
