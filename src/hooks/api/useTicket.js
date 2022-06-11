@@ -6,6 +6,7 @@ import * as ticketApi from '../../services/ticketApi';
 
 export default function useTicket() {
   const token = useToken();
+
   const {
     data: ticketData,
     loading: ticketLoading,
@@ -14,7 +15,7 @@ export default function useTicket() {
 
   useEffect(async () => {
     try {
-      await getTicket();
+      await getTicket(token);
     } catch (error) {
       if (error.response?.status !== 404 && error.response?.status !== 401)
         toast('Não foi possível carregar seu ingresso');
@@ -24,5 +25,6 @@ export default function useTicket() {
   return {
     ticketData,
     ticketLoading,
+    getTicket,
   };
 }

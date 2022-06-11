@@ -18,7 +18,7 @@ export default function Bed({ bedData, selectedBed }) {
 
   return (
     <Container onClick={handleOnClick} disabled={bedUnavailable}>
-      {bedUnavailable ? <Unavailable /> : isThisBedSelected ? <Selected /> : <Available />}
+      {isThisBedSelected ? <Selected /> : bedUnavailable ? <Unavailable /> : <Available />}
     </Container>
   );
 }

@@ -7,15 +7,30 @@ import Loading from '../../../components/Loading';
 import TicketContext from '../../../contexts/TicketContext';
 import useHotelRooms from '../../../hooks/api/useHotelRooms';
 import useSaveBed from '../../../hooks/api/useSaveBed';
+import useTicket from '../../../hooks/api/useTicket';
 import Room from './Room';
 
 export default function ChooseBed() {
-  const { ticket } = useContext(TicketContext);
-  const { rooms, roomsLoading } = useHotelRooms(ticket.hotelId);
+  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+  const { getTicket, ticketData } = useTicket();
+  const { rooms, roomsLoading, getHotelRooms } = useHotelRooms(ticket.hotelId);
   const { saveBed } = useSaveBed();
   const [selectedBedId, setSelectedBedId] = useState(ticket.bedId);
-
+  console.log(ticket);
   const selectedBed = { selectedBedId, setSelectedBedId };
+
+  useEffect(async () => {
+    try {
+      await getTicket();
+      setTicket((ticket) => ({ ...ticket, ...ticketData }));
+    } catch (error) {
+      if (error.response?.status) toast('Desculpe, tente novamente');
+    }
+  }, []);
+
+  useEffect(() => {
+    getHotelRooms(ticket.hotelId);
+  }, [ticket.hotelId]);
 
   async function handleOnClick() {
     try {
@@ -29,7 +44,7 @@ export default function ChooseBed() {
     }
   }
 
-  if (roomsLoading)
+  if (roomsLoading || ticketLoading)
     return (
       <Container>
         <Loading />
@@ -39,20 +54,22 @@ export default function ChooseBed() {
   if (rooms === null) return null;
 
   return (
-    <Container>
-      <RoomsContainer>
-        {rooms.map((room) => (
-          <Room roomData={room} key={room.id} selectedBed={selectedBed} />
-        ))}
-      </RoomsContainer>
+    <>
+      <StyledSectionTitle>Ótima pedida! Agora escolha seu quarto:</StyledSectionTitle>
+      <Container>
+        <RoomsContainer>
+          {rooms.map((room) => (
+            <Room roomData={room} key={room.id} selectedBed={selectedBed} />
+          ))}
+        </RoomsContainer>
 
-      <ButtonWrapper>
-        <Button disabled={selectedBedId === null} onClick={handleOnClick}>
-          {' '}
-          Reservar quarto
-        </Button>
-      </ButtonWrapper>
-    </Container>
+        <ButtonWrapper>
+          <Button disabled={selectedBedId === null} onClick={handleOnClick}>
+            Reservar quarto
+          </Button>
+        </ButtonWrapper>
+      </Container>
+    </>
   );
 }
 
@@ -75,3 +92,10 @@ const ButtonWrapper = styled.div`
   width: 30%;
   margin-top: 3vmin;
 `;
+
+const StyledSectionTitle = styled.div(() => ({
+  color: '#8E8E8E',
+  marginTop: '52px',
+  fontSize: '20px',
+  lineHeight: '23px',
+}));

@@ -1,11 +1,32 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import ChooseBed from './ChooseBed';
 import Hotels from './Hotels';
+import * as api from '../../../services/ticketApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Content() {
-  const { ticket } = useContext(TicketContext);
+  const token = useToken();
+  const { ticket, setTicket } = useContext(TicketContext);
+
+  useEffect(() => {
+    const promise = api.getTicket(token);
+    promise
+      .then((response) => {
+        setTicket((ticket) => ({
+          ...ticket,
+          ...response,
+          type: response.type,
+          booked: true,
+          checkPayment: true,
+          totalValue: response.totalValue,
+          hotel: response.hotel,
+          payment: true,
+        }));
+      })
+      .catch(() => {});
+  }, []);
 
   if (!ticket.payment) {
     return (
@@ -14,26 +35,20 @@ export default function Content() {
       </CenterChildren>
     );
   }
-  if (!ticket.hotel) {
-    return (
-      <CenterChildren>
-        <div>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</div>
-      </CenterChildren>
-    );
-  }
 
-  if (ticket.hotel) return <Hotels />;
-
-  if (ticket.hotelId) {
+  if (ticket.hotel)
     return (
       <>
-        <StyledSectionTitle>Ótima pedida! Agora escolha seu quarto:</StyledSectionTitle>
-        <ChooseBed />
+        <Hotels />
+        {ticket.hotelId && <ChooseBed />}
       </>
     );
-  }
 
-  return 'Hotel: Em breve!';
+  return (
+    <CenterChildren>
+      <div>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</div>
+    </CenterChildren>
+  );
 }
 
 const CenterChildren = styled.div`
@@ -49,10 +64,3 @@ const CenterChildren = styled.div`
     color: #8e8e8e;
   }
 `;
-
-const StyledSectionTitle = styled.span(() => ({
-  color: '#8E8E8E',
-  marginTop: '52px',
-  fontSize: '20px',
-  lineHeight: '23px',
-}));

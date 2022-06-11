@@ -23,5 +23,6 @@ export default function useHotelRooms(hotelId) {
   return {
     rooms,
     roomsLoading,
+    getHotelRooms,
   };
 }

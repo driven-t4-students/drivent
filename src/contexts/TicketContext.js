@@ -9,7 +9,9 @@ export function TicketProvider({ children }) {
   const { ticketData, ticketLoading } = useTicket();
   const [ticket, setTicket] = useLocalStorage('ticket', { booked: false });
 
-  if (ticketData) setTicket({ ...ticketData, booked: true, payment: true, hotelId: false });
+  useEffect(() => {
+    if (ticketData) setTicket({ ...ticketData, booked: true, payment: true, hotelId: false });
+  }, [ticketData]);
 
   return <TicketContext.Provider value={{ ticket, setTicket, ticketLoading }}>{children}</TicketContext.Provider>;
 }

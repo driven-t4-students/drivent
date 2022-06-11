@@ -12,7 +12,7 @@ export default function PaymentDone() {
       <ResumeTicket>
         <TicketDetails>
           <p>{ticket.type === 'online' ? 'Online' : `Presencial ${ticket.hotel ? ' + Com Hotel' : ' + Sem Hotel'}`}</p>
-          <TicketValue>R$ {ticket.value}</TicketValue>
+          <TicketValue>R$ {ticket.totalValue}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>

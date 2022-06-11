@@ -2,8 +2,8 @@ import api from './api';
 
 export async function createBedBooking(token, data) {
   const { selectedBedId: bedId, id: ticketId } = data;
-
   const body = { ticketId };
+  console.log(body);
   const headers = {
     headers: {
       Authorization: `Bearer ${token}`,
