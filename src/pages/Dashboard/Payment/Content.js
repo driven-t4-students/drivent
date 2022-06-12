@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
@@ -8,10 +8,30 @@ import BookOnline from './BookOnline';
 import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
 import BookPresential from './BookPresential';
+import * as api from '../../../services/ticketApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Content() {
   const { enrollment, enrollmentLoading } = useEnrollment();
-  const { ticket, ticketLoading } = useContext(TicketContext);
+  const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+  const token = useToken();
+
+  useEffect(() => {
+    const promise = api.getTicket(token);
+    promise
+      .then((response) => {
+        setTicket((ticket) => ({
+          ...ticket,
+          ...response,
+          type: response.type,
+          booked: true,
+          checkPayment: true,
+          totalValue: response.totalValue,
+          payment: true,
+        }));
+      })
+      .catch(() => { });
+  }, []);
 
   if (enrollmentLoading || ticketLoading) {
     return (
