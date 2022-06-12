@@ -5,6 +5,7 @@ import ChooseBed from './ChooseBed';
 import Hotels from './Hotels';
 import * as api from '../../../services/ticketApi';
 import useToken from '../../../hooks/useToken';
+import SelectedRoom from './selectedRoom';
 
 export default function Content() {
   const token = useToken();
@@ -25,14 +26,20 @@ export default function Content() {
           payment: true,
         }));
       })
-      .catch(() => {});
-  }, []);
+      .catch(() => { });
+  }, [ticket.bedId]);
 
   if (!ticket.payment) {
     return (
       <CenterChildren>
         <div>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</div>
       </CenterChildren>
+    );
+  }
+
+  if (ticket.bedId) {
+    return (
+      <SelectedRoom />
     );
   }
 

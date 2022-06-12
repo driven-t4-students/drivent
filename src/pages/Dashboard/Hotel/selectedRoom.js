@@ -9,30 +9,76 @@ import * as api from '../../../services/hotelsApi';
 export default function SelectedRoom({ hasBed }) {
   const { userData } = useContext(UserContext);
   const { ticket } = useContext(TicketContext);
-  const [roomInformation, setRoomIformation] = useState();
+  const [roomInformation, setRoomInformation] = useState();
+  const [bedsOccupied, setBedsOccupied] = useState();
 
   useEffect(() => {
-    api.getHotelsByBedId(userData.token, ticket.hotelId).then(async (e) => console.log(e));
+    const promise = api.getHotelsByBedId(userData.token, ticket.bedId);
+    promise.then((hotelInfo) => {
+      setRoomInformation(hotelInfo);
+      api.getBedsByRoomId(userData.token, hotelInfo.hotels.roomId).then((res) => {
+        setBedsOccupied(res);
+      });
+    });
   }, []);
 
-  return (
-    <>
-      <SectionTitle>Você já escolheu seu quarto:</SectionTitle>
-      <Hotel>
-        <img src="none" alt="none" />
-        <HotelName>{'nada'}</HotelName>
-        <Description>Tipos de acomodação:</Description>
-        <SubDescription>{'nadinha'}</SubDescription>
-        <Description>Vagas Disponíveis:</Description>
-        <SubDescription>{'numberBeds - bedsOccuped'}</SubDescription>
-      </Hotel>
-      <SubmitContainer>
-        <Button type="submit" onClick={() => console.log(hasBed)}>
-          TROCAR DE QUARTO
-        </Button>
-      </SubmitContainer>
-    </>
-  );
+  let cont = -1;
+  let hotel = { name: '', image: '', number: 0, type: 0 };
+  let hotelType = '';
+  let beds = 'Somente você';
+
+  if (roomInformation && bedsOccupied) {
+    for (let i = 0; i < bedsOccupied.Bed.length; i++) {
+      const element = bedsOccupied.Bed[i];
+      if (element.Ticket) {
+        cont += 1;
+      }
+    }
+
+    hotel = {
+      name: roomInformation.hotels.room.Hotel.name,
+      image: roomInformation.hotels.room.Hotel.imageUrl,
+      number: roomInformation.hotels.room.number,
+      type: roomInformation.hotels.room.type,
+    };
+
+    if (hotel.type === 1) {
+      hotelType = 'Single';
+    } else if (hotel.type === 2) {
+      hotelType = 'Double';
+    } else if (hotel.type === 3) {
+      hotelType = 'Triple';
+    }
+
+    if (cont === 1) {
+      beds = `Você e mais ${cont} pessoa`;
+    } else if (cont === 2) {
+      beds = `Você e mais ${cont} pessoas`;
+    }
+
+    return (
+      <>
+        <SectionTitle>Você já escolheu seu quarto:</SectionTitle>
+        <Hotel>
+          <img src={hotel.image} alt={hotel.name} />
+          <HotelName>{hotel.name}</HotelName>
+          <Description>Quarto reservado</Description>
+          <SubDescription>{hotel.number} ({hotelType})</SubDescription>
+          <Description>Pessoas no seu quarto</Description>
+          <SubDescription>{beds}</SubDescription>
+        </Hotel>
+        <SubmitContainer>
+          <Button type="submit" onClick={() => 'console.log(hasBed)'}>
+            TROCAR DE QUARTO
+          </Button>
+        </SubmitContainer>
+      </>
+    );
+  } else {
+    return (
+      <h1>Loading...</h1>
+    );
+  }
 }
 
 const Hotel = styled.div`

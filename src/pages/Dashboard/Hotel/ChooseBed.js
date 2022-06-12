@@ -16,7 +16,6 @@ export default function ChooseBed() {
   const { rooms, roomsLoading, getHotelRooms } = useHotelRooms(ticket.hotelId);
   const { saveBed } = useSaveBed();
   const [selectedBedId, setSelectedBedId] = useState(ticket.bedId);
-  console.log(ticket);
   const selectedBed = { selectedBedId, setSelectedBedId };
 
   useEffect(async () => {
@@ -36,7 +35,7 @@ export default function ChooseBed() {
     try {
       const data = { ...ticket, selectedBedId };
       await saveBed(data);
-
+      setTicket((ticket) => ({ ...ticket, bedId: selectedBedId }));
       toast('Acomodação escolhida com sucesso!');
     } catch (err) {
       console.log(err);
