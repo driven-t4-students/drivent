@@ -37,7 +37,7 @@ export default function Hotels() {
     <Stack>
       {!hasBed ? (
         <>
-          <SectionTitle>Primeiro, escolha sua modalidade de ingresso</SectionTitle>
+          <SectionTitle>Primeiro, escolha seu hotel</SectionTitle>
           <ContainerHotels>
             {hotels.map((hotel, i) => (
               <HotelDescription hotel={hotel} handleChange={handleChange} key={i} />

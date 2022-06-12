@@ -1,17 +1,37 @@
 import { Typography } from '@material-ui/core';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
 import Content from './Content';
+import * as api from '../../../services/ticketApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Hotel() {
-  const { ticket } = useContext(TicketContext);
+  const token = useToken();
+  const { ticket, setTicket } = useContext(TicketContext);
+
+  useEffect(() => {
+    const promise = api.getTicket(token);
+    promise
+      .then((response) => {
+        setTicket((ticket) => ({
+          ...ticket,
+          ...response,
+          type: response.type,
+          booked: true,
+          checkPayment: true,
+          totalValue: response.totalValue,
+          hotel: response.hotel,
+          payment: true,
+        }));
+      })
+      .catch(() => {});
+  }, []);
 
   if (!ticket.payment) {
     return (
       <CenterChildren>
-        <div>Você precisa ter confirmado pagamento antes
-          de fazer a escolha de hospedagem</div>
+        <div>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</div>
       </CenterChildren>
     );
   }
@@ -25,7 +45,7 @@ export default function Hotel() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-      <Content/>
+      <Content />
     </>
   );
 }

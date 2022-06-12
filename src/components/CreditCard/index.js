@@ -29,7 +29,7 @@ export default function ReactCreditCards() {
     const formData = {
       type: ticket.type,
       hotel: ticket.hotel,
-      totalValue: ticket.value,
+      totalValue: ticket.totalValue,
       userId: userData.user.id,
     };
     if (form.cvc || form.expiry || form.focus || form.name || form.number) {
@@ -38,12 +38,12 @@ export default function ReactCreditCards() {
         .then((e) => {
           setTicket((ticket) => ({ ...ticket, payment: true }));
         })
-        .catch((error) => { });
+        .catch((error) => {});
     } else {
       toast('Favor preencher os dados do cartão!');
     }
   }
-    
+
   const handleInputFocus = (e) => {
     setForm({ ...form, focus: e.target.name });
   };
@@ -62,16 +62,10 @@ export default function ReactCreditCards() {
 
   return (
     <>
-      <Form >
+      <Form>
         <div className="App-payment">
-          <Card
-            cvc={form.cvc}
-            expiry={form.expiry}
-            focused={form.focus}
-            name={form.name}
-            number={form.number}
-          />
-          <ContainerFormData >
+          <Card cvc={form.cvc} expiry={form.expiry} focused={form.focus} name={form.name} number={form.number} />
+          <ContainerFormData>
             <FormNumber>
               <input
                 type="tel"
@@ -121,9 +115,7 @@ export default function ReactCreditCards() {
             </ContainerFormBottom>
           </ContainerFormData>
         </div>
-        <Button onClick={handleBookingTickets}>
-            FINALIZAR PAGAMENTO
-        </Button>
+        <Button onClick={handleBookingTickets}>FINALIZAR PAGAMENTO</Button>
       </Form>
     </>
   );
@@ -165,4 +157,3 @@ const ContainerFormData = styled.div`
     height: 45px;
   }
 `;
-

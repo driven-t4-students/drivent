@@ -18,7 +18,7 @@ export default function ResumeOrder() {
               ? 'Online'
               : `Presencial ${ticket.hotel === true ? ' + Com Hotel' : ' + Sem Hotel'}`}
           </p>
-          <TicketValue>R$ {ticket.value}</TicketValue>
+          <TicketValue>R$ {ticket.totalValue}</TicketValue>
         </TicketDetails>
       </ResumeTicket>
       <SectionTitle>Pagamento</SectionTitle>

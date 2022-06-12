@@ -78,6 +78,7 @@ const Hotel = styled.div`
   align-items: center;
 
   padding: 16px;
+  cursor: pointer;
 
   ${(props) => (props.active ? 'background-color:#FFEED2;' : '')};
 
