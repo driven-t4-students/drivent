@@ -15,18 +15,32 @@ export default function Content() {
     const promise = api.getTicket(token);
     promise
       .then((response) => {
-        setTicket((ticket) => ({
-          ...ticket,
-          ...response,
-          type: response.type,
-          booked: true,
-          checkPayment: true,
-          totalValue: response.totalValue,
-          hotel: response.hotel,
-          payment: true,
-        }));
+        if (ticket.bedId === null) {
+          setTicket((ticket) => ({
+            ...ticket,
+            ...response,
+            bedId: null,
+            type: response.type,
+            booked: true,
+            checkPayment: true,
+            totalValue: response.totalValue,
+            hotel: response.hotel,
+            payment: true,
+          }));
+        } else {
+          setTicket((ticket) => ({
+            ...ticket,
+            ...response,
+            type: response.type,
+            booked: true,
+            checkPayment: true,
+            totalValue: response.totalValue,
+            hotel: response.hotel,
+            payment: true,
+          }));
+        }
       })
-      .catch(() => { });
+      .catch(() => {});
   }, [ticket.bedId]);
 
   if (!ticket.payment) {
@@ -37,10 +51,8 @@ export default function Content() {
     );
   }
 
-  if (ticket.bedId) {
-    return (
-      <SelectedRoom />
-    );
+  if (ticket.bedId !== null) {
+    return <SelectedRoom />;
   }
 
   if (ticket.hotel)
