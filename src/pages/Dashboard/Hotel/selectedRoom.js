@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Button from '../../../components/Form/Button';
 import SectionTitle from '../../../components/StyledSectionTitle';
@@ -6,35 +7,38 @@ import TicketContext from '../../../contexts/TicketContext';
 import UserContext from '../../../contexts/UserContext';
 import * as api from '../../../services/hotelsApi';
 
-export default function SelectedRoom({ hasBed }) {
+export default function SelectedRoom() {
+  const { ticket, setTicket } = useContext(TicketContext);
   const { userData } = useContext(UserContext);
-  const { ticket } = useContext(TicketContext);
   const [roomInformation, setRoomInformation] = useState();
   const [bedsOccupied, setBedsOccupied] = useState();
+
+  let hotel = { name: '', image: '', number: 0, type: 0 };
+  let hotelType = '';
+  let beds = 'Somente você';
 
   useEffect(() => {
     const promise = api.getHotelsByBedId(userData.token, ticket.bedId);
     promise.then((hotelInfo) => {
       setRoomInformation(hotelInfo);
+
       api.getBedsByRoomId(userData.token, hotelInfo.hotels.roomId).then((res) => {
         setBedsOccupied(res);
       });
     });
   }, []);
 
-  let cont = -1;
-  let hotel = { name: '', image: '', number: 0, type: 0 };
-  let hotelType = '';
-  let beds = 'Somente você';
+  async function resetBed() {
+    try {
+      setTicket({ ...ticket, bedId: null });
+      toast('Solicitação feita com sucesso!');
+    } catch (err) {
+      console.log(err);
+      toast('Falha ao solicitar sua troca de quarto. Tente novamente!');
+    }
+  }
 
   if (roomInformation && bedsOccupied) {
-    for (let i = 0; i < bedsOccupied.Bed.length; i++) {
-      const element = bedsOccupied.Bed[i];
-      if (element.Ticket) {
-        cont += 1;
-      }
-    }
-
     hotel = {
       name: roomInformation.hotels.room.Hotel.name,
       image: roomInformation.hotels.room.Hotel.imageUrl,
@@ -46,14 +50,10 @@ export default function SelectedRoom({ hasBed }) {
       hotelType = 'Single';
     } else if (hotel.type === 2) {
       hotelType = 'Double';
+      beds = 'Você e mais 1 pessoa';
     } else if (hotel.type === 3) {
       hotelType = 'Triple';
-    }
-
-    if (cont === 1) {
-      beds = `Você e mais ${cont} pessoa`;
-    } else if (cont === 2) {
-      beds = `Você e mais ${cont} pessoas`;
+      beds = 'Você e mais 2 pessoas';
     }
 
     return (
@@ -63,21 +63,21 @@ export default function SelectedRoom({ hasBed }) {
           <img src={hotel.image} alt={hotel.name} />
           <HotelName>{hotel.name}</HotelName>
           <Description>Quarto reservado</Description>
-          <SubDescription>{hotel.number} ({hotelType})</SubDescription>
+          <SubDescription>
+            {hotel.number} ({hotelType})
+          </SubDescription>
           <Description>Pessoas no seu quarto</Description>
           <SubDescription>{beds}</SubDescription>
         </Hotel>
         <SubmitContainer>
-          <Button type="submit" onClick={() => 'console.log(hasBed)'}>
+          <Button type="submit" onClick={() => resetBed()}>
             TROCAR DE QUARTO
           </Button>
         </SubmitContainer>
       </>
     );
   } else {
-    return (
-      <h1>Loading...</h1>
-    );
+    return <h1>Loading...</h1>;
   }
 }
 
