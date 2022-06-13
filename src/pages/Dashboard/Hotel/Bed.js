@@ -9,7 +9,7 @@ export default function Bed({ bedData, selectedBed }) {
 
   const bedUnavailable = bedData.Ticket !== null && bedData.id !== ticket.bedId;
 
-  const isThisBedSelected = selectedBedId === bedData.id;
+  const isThisBedSelected = bedData.id === ticket.lastBedId || selectedBedId === bedData.id;
 
   function handleOnClick() {
     if (isThisBedSelected) setSelectedBedId(null);

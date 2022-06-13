@@ -13,6 +13,7 @@ export default function SelectedRoom() {
   const [roomInformation, setRoomInformation] = useState();
   const [bedsOccupied, setBedsOccupied] = useState();
 
+  let cont = -1;
   let hotel = { name: '', image: '', number: 0, type: 0 };
   let hotelType = '';
   let beds = 'Somente você';
@@ -30,7 +31,7 @@ export default function SelectedRoom() {
 
   async function resetBed() {
     try {
-      setTicket({ ...ticket, bedId: null });
+      setTicket({ ...ticket, lastBedId: ticket.bedId, bedId: null });
       toast('Solicitação feita com sucesso!');
     } catch (err) {
       console.log(err);
@@ -39,6 +40,13 @@ export default function SelectedRoom() {
   }
 
   if (roomInformation && bedsOccupied) {
+    for (let i = 0; i < bedsOccupied.Bed.length; i++) {
+      const element = bedsOccupied.Bed[i];
+      if (element.Ticket) {
+        cont += 1;
+      }
+    }
+
     hotel = {
       name: roomInformation.hotels.room.Hotel.name,
       image: roomInformation.hotels.room.Hotel.imageUrl,
@@ -50,10 +58,14 @@ export default function SelectedRoom() {
       hotelType = 'Single';
     } else if (hotel.type === 2) {
       hotelType = 'Double';
-      beds = 'Você e mais 1 pessoa';
     } else if (hotel.type === 3) {
       hotelType = 'Triple';
-      beds = 'Você e mais 2 pessoas';
+    }
+
+    if (cont === 1) {
+      beds = `Você e mais ${cont} pessoa`;
+    } else if (cont === 2) {
+      beds = `Você e mais ${cont} pessoas`;
     }
 
     return (
