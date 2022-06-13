@@ -1,35 +1,36 @@
 import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
-import UserContext from '../../../contexts/UserContext';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Loading from '../../../components/Loading';
 import SelectTicketType from './SelectTicketType';
 import BookOnline from './BookOnline';
 import ResumeOrder from './ResumeOrder';
 import PaymentDone from './PaymentDone';
-import * as api from '../../../services/ticketApi';
 import BookPresential from './BookPresential';
+import * as api from '../../../services/ticketApi';
+import useToken from '../../../hooks/useToken';
 
 export default function Content() {
-  const { userData } = useContext(UserContext);
   const { enrollment, enrollmentLoading } = useEnrollment();
   const { ticket, ticketLoading, setTicket } = useContext(TicketContext);
+  const token = useToken();
 
   useEffect(() => {
-    const promise = api.getTicket(userData.token);
+    const promise = api.getTicket(token);
     promise
-      .then((e) => {
-        setTicket(() => ({
-          type: e.type,
+      .then((response) => {
+        setTicket((ticket) => ({
+          ...ticket,
+          ...response,
+          type: response.type,
           booked: true,
           checkPayment: true,
-          value: e.totalValue,
-          hotel: e.hotel,
+          totalValue: response.totalValue,
           payment: true,
         }));
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   if (enrollmentLoading || ticketLoading) {
@@ -73,7 +74,6 @@ const CenterChildren = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   div {
     width: 388px;
     text-align: center;

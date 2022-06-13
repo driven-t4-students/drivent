@@ -1,11 +1,12 @@
 import { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import { AiOutlineGithub } from 'react-icons/ai';
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
 import Button from '../../components/Form/Button';
+import ButtonGitHub from '../../components/Form/ButtonGitHub';
 import Link from '../../components/Link';
 import { Row, Title, Label } from '../../components/Auth';
 
@@ -24,7 +25,7 @@ export default function SignIn() {
   const { setUserData } = useContext(UserContext);
 
   const navigate = useNavigate();
-  
+
   async function submit(event) {
     event.preventDefault();
 
@@ -36,7 +37,7 @@ export default function SignIn() {
     } catch (err) {
       toast('Não foi possível fazer o login!');
     }
-  } 
+  }
 
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
@@ -50,6 +51,7 @@ export default function SignIn() {
           <Input label="E-mail" type="text" fullWidth value={email} onChange={e => setEmail(e.target.value)} />
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
+          <ButtonGitHub href={'https://github.com/login/oauth/authorize?client_id=66848e74700a296048c1'} fullWidth disabled={loadingSignIn}>Entrar com GitHub <p><AiOutlineGithub /></p></ButtonGitHub>
         </form>
       </Row>
       <Row>
