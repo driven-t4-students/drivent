@@ -1,10 +1,30 @@
 import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import TicketContext from '../../../contexts/TicketContext';
+import Content from './Content';
+import useToken from '../../../hooks/useToken';
+import * as api from '../../../services/ticketApi';
 
 export default function Activities() {
-  const { ticket } = useContext(TicketContext);
+  const { ticket, setTicket } = useContext(TicketContext);
+  const token = useToken();
+  useEffect(() => {
+    const promise = api.getTicket(token);
+    promise
+      .then((response) => {
+        setTicket((ticket) => ({
+          ...ticket,
+          ...response,
+          type: response.type,
+          booked: true,
+          checkPayment: true,
+          totalValue: response.totalValue,
+          payment: true,
+        }));
+      })
+      .catch(() => { });
+  }, []);
 
   if (!ticket.payment) {
     return (
@@ -23,7 +43,10 @@ export default function Activities() {
     );
   }
   return (
-    <StyledTypography variant="h4">Escolha de Atividades</StyledTypography>
+    <>
+      <StyledTypography variant="h4">Escolha de Atividades</StyledTypography>
+      <Content/>
+    </>
   );
 }
 
