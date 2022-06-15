@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
