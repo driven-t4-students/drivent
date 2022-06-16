@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { BiLogIn } from 'react-icons/bi';
+import { GiCancel } from 'react-icons/gi';
 
 export default function Activities({ activities }) {
   return (
@@ -13,16 +15,43 @@ export default function Activities({ activities }) {
             column={activity.place}
             row={`time-${activity.startsAt} / time-${activity.endsAt}`.replace(/:/g, '')}
           >
-            <div>
+            <ActivityInfo>
               <div id="activityName">{activity.name}</div>
               <div id="activityDuration">{`${activity.startsAt} - ${activity.endsAt}`}</div>
-            </div>
+            </ActivityInfo>
+            <VacancieInfo vacancies={activity.ActivitySubscription} />
           </Activity>
         ))}
       </Schedule>
     </>
   );
 }
+
+function VacancieInfo({ vacancies }) {
+  let cont = 0;
+  vacancies.map((vacancy) => {
+    if (vacancy.Ticket === null) {
+      cont = cont + 1;
+    }
+  });
+
+  return (
+    <Vacancie>
+      {cont === 0 ?
+        <Cancel>
+          <GiCancel size={'18px'} />
+          <p>Esgotado</p>
+        </Cancel>
+        :
+        <Entry onClick={() => console.log('Entrou na atividade')}>
+          <BiLogIn size={'18px'} />
+          <p>{cont} vagas</p>
+        </Entry>
+      }
+    </Vacancie>
+  );
+};
+
 const Schedule = styled.div`
   display: grid;
   margin-top: 5vmin;
@@ -58,6 +87,7 @@ const Place = styled.div`
 `;
 
 const Activity = styled.div`
+  display: flex;
   grid-row: ${({ row }) => row};
   grid-column: ${({ column }) => column};
 
@@ -86,4 +116,38 @@ const Activity = styled.div`
 
     color: #343434;
   }
+`;
+
+const Vacancie = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-left: solid 1px #CFCFCF;
+  padding-left: 16px;
+  p{
+    font-size: 9px;
+  }
+  `;
+
+const Entry = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #078632;
+  gap: 2px;
+`;
+
+const Cancel = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #CC6666;
+  gap: 2px;
+`;
+
+const ActivityInfo = styled.div`  
+  width: 200px;
 `;
