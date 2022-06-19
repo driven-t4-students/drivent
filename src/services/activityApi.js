@@ -11,7 +11,7 @@ export async function getAllActivities(token) {
 }
 
 export async function subscribeOnActivity(token, data) {
-  const response = await api.post('/activity', data, {
+  const response = await api.put('/activity', data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

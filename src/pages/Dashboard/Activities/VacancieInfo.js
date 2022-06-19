@@ -3,36 +3,38 @@ import { BiLogIn } from 'react-icons/bi';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import { GiCancel } from 'react-icons/gi';
 import * as api from '../../../services/activityApi';
+import * as ticketApi from '../../../services/ticketApi';
 import useToken from '../../../hooks/useToken';
 import { useContext, useEffect, useState } from 'react';
 import TicketContext from '../../../contexts/TicketContext';
+import { toast } from 'react-toastify';
 
 export default function VacancieInfo({ vacancies, activity, getActivitySubscription, subscription, activities }) {
   const token = useToken();
-  const { ticket, setTicket } = useContext(TicketContext);
+  const { ticket } = useContext(TicketContext);
   const [, setSubscription] = useState([]);
   const [activitySubscripted, setActivitySubscripted] = useState([]);
-
-  console.log(activitySubscripted);
+  const [reload, setReload] = useState('');
 
   function handleActivitySubscripted(data) {
-    const aaaa = [];
+    const newData = [];
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < activities.length; j++) {
-        if (data[i].activityId === activities[j].id) aaaa.push(activities[j]);
+        if (data[i].activityId === activities[j].id) newData.push(activities[j]);
       }
     }
 
-    setActivitySubscripted(aaaa);
+    setActivitySubscripted(newData);
   }
 
   useEffect(() => {
-    api.subscribeOnActivity(token, { subscriptionId: activity.id, ticketId: ticket.id }).then((resp) => {
-      setSubscription(resp.activities.activitySubscriptionId);
-      getActivitySubscription(resp.activities.activitySubscriptionId);
-      handleActivitySubscripted(resp.activities.activitySubscriptionId);
+    ticketApi.getTicketWithSubscription(token, ticket.id).then((res) => {
+      const data = res.ticket.activitySubscriptionId;
+      setSubscription(data);
+      getActivitySubscription(data);
+      handleActivitySubscripted(data);
     });
-  }, []);
+  }, [reload, activitySubscripted]);
 
   let cont = 0;
   vacancies.map((vacancy) => {
@@ -41,33 +43,39 @@ export default function VacancieInfo({ vacancies, activity, getActivitySubscript
     }
   });
 
-  async function teste(id) {
-    const inscrito = [
-      {
-        id: 1,
-        endsAt: 11,
-        startsAt: 10,
-      },
-    ];
+  async function newSubscription() {
+    let freedomSchedule = true;
 
-    let confereData = true;
+    let activityStarts = new Date('2022-01-01 ' + activity.startsAt);
+    let activityEnds = new Date('2022-01-01 ' + activity.endsAt);
 
-    let inicio = 0;
-    let fim = 0;
+    for (const subs of activitySubscripted) {
+      let subscriptionStarts = new Date('2022-01-01 ' + subs.startsAt);
+      let subscriptionEnds = new Date('2022-01-01 ' + subs.endsAt);
 
-    // console.log(activity);
+      if (subscriptionStarts < activityEnds && subscriptionStarts >= activityStarts) freedomSchedule = false;
+      if (subscriptionEnds < activityEnds && subscriptionEnds > activityStarts) freedomSchedule = false;
+    }
 
-    const separaInicio = activity.startsAt.split(':');
-    const separaFim = activity.endsAt.split(':');
+    if (freedomSchedule) {
+      await api
+        .subscribeOnActivity(token, { subscriptionId: activity.id, ticketId: ticket.id, cancelSubscription: 1 })
+        .then((res) => {
+          setReload(res.activities.activityId);
+          toast('Inscrição confirmada!');
+        });
+    } else {
+      toast('Horários conflitantes!');
+    }
+  }
 
-    inicio = parseInt(separaInicio[0]);
-    if (parseInt(separaInicio[1]) === 30) inicio += 0.5;
-
-    fim = parseInt(separaFim[0]);
-    if (parseInt(separaFim[1]) === 30) fim += 0.5;
-
-    if (inscrito[0].startsAt <= inicio && inscrito[0].endsAt > inicio) confereData = false;
-    if (inscrito[0].startsAt <= fim && inscrito[0].endsAt > fim) confereData = false;
+  async function cancelSubscription() {
+    await api
+      .subscribeOnActivity(token, { subscriptionId: activity.id, ticketId: ticket.id, cancelSubscription: null })
+      .then((res) => {
+        setReload(res.activities.activityId);
+        toast('Inscrição cancelada!');
+      });
   }
 
   return (
@@ -81,12 +89,12 @@ export default function VacancieInfo({ vacancies, activity, getActivitySubscript
         <>
           <>
             {subscription[0]?.activityId === activity.id ? (
-              <Subscripted onClick={() => teste(activity.id)}>
+              <Subscripted onClick={() => cancelSubscription()}>
                 <AiOutlineCheckCircle size={'18px'} />
                 <p>Inscrito</p>
               </Subscripted>
             ) : (
-              <Entry onClick={() => teste(activity.id)}>
+              <Entry onClick={() => newSubscription()}>
                 <BiLogIn size={'18px'} />
                 <p>{cont} vagas</p>
               </Entry>
