@@ -12,7 +12,7 @@ export default function Content() {
   const [filteredActivities, setFilteredActivities] = useState([]);
   const [isSelected, setIsSelected] = useState();
   const [dates, setDates] = useState();
-  console.log({ filteredActivities });
+
   const token = useToken();
   useEffect(() => {
     const promise = api.getAllActivities(token);
@@ -46,8 +46,8 @@ export default function Content() {
       <Stack>
         <SectionTitle>Primeiro, filtre pelo dia do evento</SectionTitle>
         <ContainerDates>
-          {dates?.map((date) => (
-            <EventDate onClick={() => handleSelect(date)} active={isSelected === date ? true : false}>
+          {dates?.map((date, i) => (
+            <EventDate key={i} onClick={() => handleSelect(date)} active={isSelected === date ? true : false}>
               {date}
             </EventDate>
           ))}

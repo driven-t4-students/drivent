@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import { BiLogIn } from 'react-icons/bi';
-import { GiCancel } from 'react-icons/gi';
+import VacancieInfo from './VacancieInfo';
 
 export default function Activities({ activities }) {
+  const [activitySubscription, setActivitySubscription] = useState([]);
+
+  function getActivitySubscription(data) {
+    setActivitySubscription(data);
+  }
+
   return (
     <>
       <Schedule>
@@ -10,47 +16,30 @@ export default function Activities({ activities }) {
         <Place column="side">Auditório Lateral</Place>
         <Place column="workshop">Sala de Workshop</Place>
 
-        {activities.map((activity) => (
+        {activities.map((activity, i) => (
           <Activity
+            key={activity.id}
             column={activity.place}
             row={`time-${activity.startsAt} / time-${activity.endsAt}`.replace(/:/g, '')}
+            teste={activitySubscription.filter((e) => e.activityId === activity.id).length === 1}
           >
             <ActivityInfo>
               <div id="activityName">{activity.name}</div>
               <div id="activityDuration">{`${activity.startsAt} - ${activity.endsAt}`}</div>
             </ActivityInfo>
-            <VacancieInfo vacancies={activity.ActivitySubscription} />
+            <VacancieInfo
+              vacancies={activity.ActivitySubscription}
+              activity={activity}
+              getActivitySubscription={getActivitySubscription}
+              subscription={activitySubscription.filter((e) => e.activityId === activity.id)}
+              activities={activities}
+            />
           </Activity>
         ))}
       </Schedule>
     </>
   );
 }
-
-function VacancieInfo({ vacancies }) {
-  let cont = 0;
-  vacancies.map((vacancy) => {
-    if (vacancy.Ticket === null) {
-      cont = cont + 1;
-    }
-  });
-
-  return (
-    <Vacancie>
-      {cont === 0 ?
-        <Cancel>
-          <GiCancel size={'18px'} />
-          <p>Esgotado</p>
-        </Cancel>
-        :
-        <Entry onClick={() => console.log('Entrou na atividade')}>
-          <BiLogIn size={'18px'} />
-          <p>{cont} vagas</p>
-        </Entry>
-      }
-    </Vacancie>
-  );
-};
 
 const Schedule = styled.div`
   display: grid;
@@ -91,7 +80,7 @@ const Activity = styled.div`
   grid-row: ${({ row }) => row};
   grid-column: ${({ column }) => column};
 
-  background-color: #f1f1f1;
+  background-color: ${(props) => (props.teste ? '#D0FFDB' : '#f1f1f1')};
   padding: 1vmin;
   border-radius: 5px;
   cursor: pointer;
@@ -118,36 +107,6 @@ const Activity = styled.div`
   }
 `;
 
-const Vacancie = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-left: solid 1px #CFCFCF;
-  padding-left: 16px;
-  p{
-    font-size: 9px;
-  }
-  `;
-
-const Entry = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #078632;
-  gap: 2px;
-`;
-
-const Cancel = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #CC6666;
-  gap: 2px;
-`;
-
-const ActivityInfo = styled.div`  
+const ActivityInfo = styled.div`
   width: 200px;
 `;
