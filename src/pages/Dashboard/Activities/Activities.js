@@ -78,7 +78,6 @@ const Place = styled.div`
 const Activity = styled.div`
   min-height: 70px;
   display: flex;
-  align-items: center;
   grid-row: ${({ row }) => row};
   grid-column: ${({ column }) => column};
 
