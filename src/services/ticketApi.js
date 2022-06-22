@@ -20,3 +20,14 @@ export async function postBooking(token, formData) {
   const response = await api.post('/tickets', formData, headers);
   return response.data;
 }
+
+export async function getTicketWithSubscription(token, id) {
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await api.get(`/tickets/${id}`, headers);
+
+  return response.data;
+}

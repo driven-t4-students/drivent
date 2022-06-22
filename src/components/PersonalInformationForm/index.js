@@ -62,7 +62,7 @@ export default function PersonalInformationForm() {
     initialValues: {
       cpf: '',
       name: '',
-      birthday: null,
+      birthday: dayjs().format('YYYY-MM-DD').toString(),
       phone: '',
       cep: '',
       street: '',

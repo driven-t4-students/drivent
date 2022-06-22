@@ -1,6 +1,6 @@
 import { githubLogin } from '../../services/authApi';
 import { useContext, useEffect } from 'react';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext';
 
@@ -11,14 +11,15 @@ export function Oauth() {
   const code = urlParams.get('code');
 
   useEffect(() => {
-    const promise =  githubLogin(code);
+    const promise = githubLogin(code);
     promise.then((res) => {
       setUserData(res.data);
       toast('Login realizado com sucesso!');
       navigate('/dashboard');
     });
     promise.catch((err) => {
-      toast('Não foi possível fazer o login!');
+      toast(err.response.data);
+      navigate('/');
     });
   }, []);
 
